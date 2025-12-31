@@ -1,11 +1,9 @@
 from datetime import datetime
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F, Count
 from rest_framework import viewsets, pagination
 
 from cinema.models import Genre, Actor, CinemaHall, Movie, MovieSession, Order
-
 from cinema.serializers import (
     GenreSerializer,
     ActorSerializer,
