@@ -138,6 +138,11 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+class OrderPagination(pagination.PageNumberPagination):
+    page_size = 3
+    page_size_query_param = "page_size"
+    max_page_size = 10
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = (Order.objects
                 .select_related("user")
@@ -149,6 +154,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 ))
 
     serializer_class = OrderSerializer
+    pagination_class = OrderPagination
 
     def get_serializer_class(self):
         serializer = self.serializer_class
