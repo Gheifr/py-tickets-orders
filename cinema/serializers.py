@@ -1,6 +1,13 @@
 from rest_framework import serializers
 
-from cinema.models import Genre, Actor, CinemaHall, Movie, MovieSession, Order, Ticket
+from cinema.models import (
+    Genre,
+    Actor,
+    CinemaHall,
+    Movie,
+    MovieSession,
+    Order,
+    Ticket)
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -140,7 +147,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
-    tickets = TicketListSerializer(many=True, read_only=True)  # expanded ticket + expanded movie session
+    tickets = TicketListSerializer(
+        many=True,
+        read_only=True
+    )  # expanded ticket + expanded movie session
 
     class Meta:
         model = Order

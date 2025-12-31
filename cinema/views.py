@@ -79,14 +79,13 @@ class MovieViewSet(viewsets.ModelViewSet):
 
 class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = (MovieSession.objects
-    .select_related(
-        "movie",
-        "cinema_hall",
-    )
-    .prefetch_related(
-        "tickets"
-    )
-    )
+                .select_related(
+                    "movie",
+                    "cinema_hall",
+                )
+                .prefetch_related(
+                    "tickets"
+                ))
     serializer_class = MovieSessionSerializer
 
     def get_serializer_class(self):
@@ -107,15 +106,24 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
 
         if self.action == "list":
             queryset = queryset.annotate(
-                tickets_available=(F("cinema_hall__rows") * F("cinema_hall__seats_in_row")) - Count("tickets")
+                tickets_available=(
+                    F("cinema_hall__rows")
+                    * F("cinema_hall__seats_in_row")
+                    - Count("tickets")
+                )
             )
             if date_filter_data:
-                date_filter_data = datetime.strptime(self.request.query_params.get("date"), format_string)
+                date_filter_data = datetime.strptime(
+                    self.request.query_params.get("date"),
+                    format_string
+                )
                 queryset = queryset.filter(
                     show_time__date=date_filter_data
                 )
             if movies_ids:
-                movies_ids = _get_ids_from_q_param(self.request.query_params.get("movie"))
+                movies_ids = _get_ids_from_q_param(
+                    self.request.query_params.get("movie")
+                )
                 queryset = queryset.filter(movie__id__in=movies_ids)
 
         return queryset
@@ -129,14 +137,14 @@ class OrderPagination(pagination.PageNumberPagination):
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = (Order.objects
-    .select_related("user")
-    .prefetch_related(
-        "tickets",
-        "tickets__movie_session",
-        "tickets__movie_session__movie",
-        "tickets__movie_session__cinema_hall",
-    )
-    )
+                .select_related("user")
+                .prefetch_related(
+                    "tickets",
+                    "tickets__movie_session",
+                    "tickets__movie_session__movie",
+                    "tickets__movie_session__cinema_hall",
+                ))
+
     serializer_class = OrderSerializer
     pagination_class = OrderPagination
 
