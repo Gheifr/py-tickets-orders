@@ -88,13 +88,13 @@ class MovieViewSet(viewsets.ModelViewSet):
 
 class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = (MovieSession.objects
-    .select_related(
-        "movie",
-        "cinema_hall",
-    )
-    .prefetch_related(
-        "tickets"
-    ))
+                .select_related(
+                    "movie",
+                    "cinema_hall",
+                )
+                .prefetch_related(
+                    "tickets"
+                ))
     serializer_class = MovieSessionSerializer
 
     def get_serializer_class(self):
@@ -116,9 +116,9 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             queryset = queryset.annotate(
                 tickets_available=(
-                        F("cinema_hall__rows")
-                        * F("cinema_hall__seats_in_row")
-                        - Count("tickets")
+                    F("cinema_hall__rows")
+                    * F("cinema_hall__seats_in_row")
+                    - Count("tickets")
                 )
             )
             if date_filter_data:
@@ -140,13 +140,13 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = (Order.objects
-    .select_related("user")
-    .prefetch_related(
-        "tickets",
-        "tickets__movie_session",
-        "tickets__movie_session__movie",
-        "tickets__movie_session__cinema_hall",
-    ))
+                .select_related("user")
+                .prefetch_related(
+                    "tickets",
+                    "tickets__movie_session",
+                    "tickets__movie_session__movie",
+                    "tickets__movie_session__cinema_hall",
+                ))
 
     serializer_class = OrderSerializer
 
